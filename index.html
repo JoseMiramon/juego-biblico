@@ -1,345 +1,364 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Juego Bíblico de Preguntas</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f0f0f0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            padding: 10px;
-            transition: background-color 0.3s ease, background-image 0.3s ease;
-        }
-
-        #game-container {
-            background-color: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-            width: 100%;
-            max-width: 600px;
-            text-align: center;
-            transition: background-color 0.3s ease, background-image 0.3s ease;
-        }
-
-        h1 {
-            font-size: 1.8rem;
-            color: #333;
-        }
-
-        button {
-            display: block;
-            margin: 10px 0;
-            padding: 12px;
-            background-color: #f5f5f5; /* Fondo neutro */
-            color: #333;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            width: 45%;
-            margin-right: 5%;
-            font-size: 1rem;
-            transition: background-color 0.3s ease;
-        }
-
-        button:hover {
-            background-color: #dcdcdc; /* Color más oscuro al pasar el ratón */
-        }
-
-        #score-container {
-            margin-top: 20px;
-            font-size: 1.2rem;
-        }
-
-        #next-btn, #restart-btn {
-            margin-top: 20px;
-            background-color: #008CBA;
-            padding: 12px 20px;
-            width: 100%;
-            font-size: 1.1rem;
-            display: none;
-        }
-
-        #next-btn:hover, #restart-btn:hover {
-            background-color: #006F8C;
-        }
-
-        #answers-container {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-        }
-
-        #progress-container {
-            width: 100%;
-            background-color: #E1BEE7; /* Lila suave */
-            height: 10px;
-            border-radius: 5px;
-            margin-bottom: 20px;
-        }
-
-        #progress-bar {
-            height: 100%;
-            width: 0%;
-            background: linear-gradient(to right, #9C27B0, #673AB7); /* Gradiente de morado claro a morado fuerte */
-            border-radius: 5px;
-        }
-
-        #result-container {
-            margin-top: 20px;
-            font-size: 1.2rem;
-            font-weight: bold;
-        }
-
-        /* Estilos para la pantalla final */
-        .yellow-theme {
-            background-color: #FFFAE5; /* Amarillo tenue casi blanco */
-            background-image: linear-gradient(45deg, #FFFAE5, #FFF59D);
-            color: #333;
-            text-align: center;
-            transition: background-color 0.3s ease, background-image 0.3s ease;
-        }
-
-        .yellow-theme h1 {
-            font-size: 2rem;
-            margin-bottom: 20px;
-            font-weight: bold;
-        }
-
-        /* Mejoras para el botón Volver a Jugar */
-        #restart-btn {
-            background-color: #FFEB3B;
-            border-radius: 8px;
-            font-size: 1.2rem;
-            font-weight: bold;
-            transition: background-color 0.3s ease;
-        }
-
-        #restart-btn:hover {
-            background-color: #FBC02D;
-        }
-
-        /* Animación de entrada para el puntaje */
-        .score-anim {
-            animation: fadeIn 1s ease-in-out;
-        }
-
-        /* Animación de desvanecimiento */
-        @keyframes fadeIn {
-            0% {
-                opacity: 0;
-                transform: translateY(-20px);
-            }
-            100% {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .correct {
-            background-color: #4CAF50;
-            color: white;
-            padding: 10px;
-            margin-top: 10px;
-            border-radius: 5px;
-        }
-
-        .incorrect {
-            background-color: #F44336;
-            color: white;
-            padding: 10px;
-            margin-top: 10px;
-            border-radius: 5px;
-        }
-
-        /* Estilos específicos para pantallas pequeñas */
-        @media (max-width: 768px) {
-            h1 {
-                font-size: 1.5rem;
-            }
-
-            button {
-                width: 48%;
-                margin-right: 0;
-                font-size: 1rem;
-            }
-
-            #restart-btn {
-                font-size: 1.1rem;
-            }
-
-            .yellow-theme h1 {
-                font-size: 1.8rem;
-            }
-
-            #score-container {
-                font-size: 1rem;
-            }
-
-            .score-anim {
-                font-size: 1.3rem;
-            }
-        }
-
-        @media (max-width: 480px) {
-            button {
-                width: 100%;
-                font-size: 1rem;
-            }
-
-            h1 {
-                font-size: 1.3rem;
-            }
-
-            .yellow-theme h1 {
-                font-size: 1.5rem;
-            }
-
-            #score-container {
-                font-size: 1rem;
-            }
-
-            .score-anim {
-                font-size: 1rem;
-            }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Juego Bíblico de Preguntas</title>
+  <style>
+    /* Estilos originales */
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f0f0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      padding: 10px;
+      transition: background-color 0.3s ease, background-image 0.3s ease;
+    }
+    #game-container {
+      background-color: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px;
+      width: 100%;
+      max-width: 600px;
+      text-align: center;
+      transition: background-color 0.3s ease, background-image 0.3s ease;
+      display: none; /* Se mostrará al iniciar el juego */
+    }
+    h1 {
+      font-size: 1.8rem;
+      color: #333;
+    }
+    button {
+      display: block;
+      margin: 10px 0;
+      padding: 12px;
+      background-color: #f5f5f5; /* Fondo neutro */
+      color: #333;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      width: 45%;
+      margin-right: 5%;
+      font-size: 1rem;
+      transition: background-color 0.3s ease;
+    }
+    button:hover {
+      background-color: #dcdcdc;
+    }
+    #score-container {
+      margin-top: 20px;
+      font-size: 1.2rem;
+    }
+    #next-btn, #restart-btn {
+      margin-top: 20px;
+      background-color: #008CBA;
+      padding: 12px 20px;
+      width: 100%;
+      font-size: 1.1rem;
+      display: none;
+    }
+    #next-btn:hover, #restart-btn:hover {
+      background-color: #006F8C;
+    }
+    #answers-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+    }
+    #progress-container {
+      width: 100%;
+      background-color: #E1BEE7; /* Lila suave */
+      height: 10px;
+      border-radius: 5px;
+      margin-bottom: 20px;
+    }
+    #progress-bar {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(to right, #9C27B0, #673AB7);
+      border-radius: 5px;
+      transition: width 1s ease; /* Agrega esta línea */
+    }
+    #result-container {
+      margin-top: 20px;
+      font-size: 1.2rem;
+      font-weight: bold;
+    }
+    /* Estilos para la pantalla final */
+    .yellow-theme {
+      background-color: #FFFAE5; /* Amarillo tenue casi blanco */
+      background-image: linear-gradient(45deg, #FFFAE5, #FFF59D);
+      color: #333;
+      text-align: center;
+      transition: background-color 0.3s ease, background-image 0.3s ease;
+    }
+    .yellow-theme h1 {
+      font-size: 2rem;
+      margin-bottom: 20px;
+      font-weight: bold;
+    }
+    /* Mejoras para el botón Volver a Jugar */
+    #restart-btn {
+      background-color: #FFEB3B;
+      border-radius: 8px;
+      font-size: 1.2rem;
+      font-weight: bold;
+      transition: background-color 0.3s ease;
+    }
+    #restart-btn:hover {
+      background-color: #FBC02D;
+    }
+    /* Animación de entrada para el puntaje */
+    .score-anim {
+      animation: fadeIn 1s ease-in-out;
+    }
+    @keyframes fadeIn {
+      0% { opacity: 0; transform: translateY(-20px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+    .correct {
+      background-color: #4CAF50;
+      color: green;
+      padding: 10px;
+      margin-top: 10px;
+      border-radius: 5px;
+    }
+    .incorrect {
+      background-color: #F44336;
+      color: red;
+      padding: 10px;
+      margin-top: 10px;
+      border-radius: 5px;
+    }
+    @media (max-width: 768px) {
+      h1 { font-size: 1.5rem; }
+      button { width: 48%; margin-right: 0; font-size: 1rem; }
+      #restart-btn { font-size: 1.1rem; }
+      .yellow-theme h1 { font-size: 1.8rem; }
+      #score-container { font-size: 1rem; }
+      .score-anim { font-size: 1.3rem; }
+    }
+    @media (max-width: 480px) {
+      button { width: 100%; font-size: 1rem; }
+      h1 { font-size: 1.3rem; }
+      .yellow-theme h1 { font-size: 1.5rem; }
+      #score-container { font-size: 1rem; }
+      .score-anim { font-size: 1rem; }
+    }
+    /* NUEVOS ESTILOS: Pantalla de inicio y ventana emergente */
+    #welcome-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: #f5f5f5;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 20px;
+    }
+    #welcome-screen h1 {
+      font-size: 2rem;
+      color: #333;
+    }
+    #welcome-screen p {
+      font-size: 1.2rem;
+      color: #555;
+      max-width: 500px;
+    }
+    #start-btn {
+      background-color: #4CAF50;
+      padding: 12px;
+      width: 200px;
+      font-size: 2rem;
+    }
+    #start-btn:hover {
+      background-color: #388E3C;
+    }
+    #result-modal {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+      text-align: center;
+      width: 80%;
+      max-width: 400px;
+      z-index: 10;
+    }
+    /* Nuevo estilo para el botón "Siguiente" en la ventana emergente */
+    #next-btn-modal {
+      background-color: #6cc1eb;  /* Azul */
+      width: 100%;
+      margin-top: 10px;
+      padding: 12px 20px;
+      font-size: 1.1rem;
+      border: none;
+      border-radius: 5px;
+      color: white;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    #next-btn-modal:hover {
+      background-color: #2295ce;
+    }
+    /* Aumentamos el tamaño de la letra del resultado */
+    #result-text {
+      font-size: 1.5rem;
+    }
+  </style>
 </head>
 <body>
-    <div id="game-container">
-        <h1>Juego Bíblico</h1>
-
-        <!-- Barra de progreso -->
-        <div id="progress-container">
-            <div id="progress-bar"></div>
-        </div>
-
-        <div id="question-container">
-            <p id="question"></p>
-            <div id="answers-container">
-                <button class="answer-btn" onclick="checkAnswer(0)">Respuesta 1</button>
-                <button class="answer-btn" onclick="checkAnswer(1)">Respuesta 2</button>
-                <button class="answer-btn" onclick="checkAnswer(2)">Respuesta 3</button>
-                <button class="answer-btn" onclick="checkAnswer(3)">Respuesta 4</button>
-            </div>
-        </div>
-
-        <div id="score-container">
-            <p>Puntaje: <span id="score">0</span></p>
-        </div>
-
-        <div id="result-container"></div>
-        <button id="next-btn" onclick="nextQuestion()">Siguiente</button>
-        <button id="restart-btn" onclick="restartGame()">Volver a Jugar</button>
+  <!-- Pantalla de inicio -->
+  <div id="welcome-screen">
+    <h1>Bienvenido al Juego Bíblico</h1>
+    <p>Tu objetivo es responder correctamente a todas las preguntas. ¡Demuestra cuánto sabes de la Biblia! ¿Estás listo para jugar?</p>
+    <button id="start-btn" onclick="startGame()">Listo para jugar</button>
+  </div>
+  <!-- Contenedor del juego -->
+  <div id="game-container">
+    <h1>Juego Bíblico</h1>
+    <!-- Barra de progreso -->
+    <div id="progress-container">
+      <div id="progress-bar"></div>
     </div>
-
-    <script>
-        let questions = [
-            {
-                question: "¿Quién fue el primer hombre creado por Dios?",
-                options: ["Adán", "Noé", "Abraham", "Moisés"],
-                answer: 0
-            },
-            {
-                question: "¿Cuál es el nombre del hermano de Moisés?",
-                options: ["Aaron", "Josué", "David", "Elías"],
-                answer: 0
-            },
-            {
-                question: "¿En qué parte de la Biblia se encuentra el Salmo 23?",
-                options: ["Antiguo Testamento", "Nuevo Testamento", "Apocalipsis", "Hechos"],
-                answer: 0
-            },
-            {
-                question: "¿Qué milagro hizo Jesús en las bodas de Caná?",
-                options: ["Sanó a un ciego", "Multiplicó los panes", "Convirtió agua en vino", "Resucitó a Lázaro"],
-                answer: 2
-            }
-        ];
-
-        let currentQuestionIndex = 0;
-        let score = 0;
-
-        // Función para mezclar las preguntas
-        function shuffleQuestions() {
-            questions = questions.sort(() => Math.random() - 0.5);
-        }
-
-        function loadQuestion() {
-            let question = questions[currentQuestionIndex];
-            document.getElementById("question").textContent = question.question;
-            let buttons = document.querySelectorAll(".answer-btn");
-
-            buttons.forEach((button, index) => {
-                button.textContent = question.options[index];
-            });
-
-            updateProgressBar();
-        }
-
-        function checkAnswer(selectedIndex) {
-            let correctAnswerIndex = questions[currentQuestionIndex].answer;
-            let resultContainer = document.getElementById("result-container");
-
-            if (selectedIndex === correctAnswerIndex) {
-                score++;
-                resultContainer.innerHTML = `<div class="correct">¡Correcto! La respuesta correcta es: ${questions[currentQuestionIndex].options[correctAnswerIndex]}</div>`;
-            } else {
-                resultContainer.innerHTML = `<div class="incorrect">¡Incorrecto! La respuesta correcta es: ${questions[currentQuestionIndex].options[correctAnswerIndex]}</div>`;
-            }
-
-            document.getElementById("score").textContent = score;
-            document.getElementById("next-btn").style.display = "block";
-        }
-
-        function nextQuestion() {
-            currentQuestionIndex++;
-            if (currentQuestionIndex < questions.length) {
-                loadQuestion();
-                document.getElementById("result-container").innerHTML = "";
-                document.getElementById("next-btn").style.display = "none";
-            } else {
-                document.getElementById("question-container").style.display = "none";
-                document.getElementById("result-container").innerHTML = "<h1>¡Todas las preguntas fueron contestadas!</h1>";
-                document.getElementById("next-btn").style.display = "none";
-                document.getElementById("restart-btn").style.display = "block";
-                document.body.classList.add("yellow-theme");
-                document.getElementById("game-container").classList.add("yellow-theme");
-
-                // Cambiar el color de la barra de progreso a dorado cuando se completa el juego
-                document.getElementById("progress-bar").style.background = "#FFB300";
-            }
-        }
-
-        function updateProgressBar() {
-            let progress = ((currentQuestionIndex + 1) / questions.length) * 100;
-            document.getElementById("progress-bar").style.width = progress + "%";
-        }
-
-        function restartGame() {
-            currentQuestionIndex = 0;
-            score = 0;
-            document.getElementById("score").textContent = score;
-            document.getElementById("next-btn").style.display = "none";
-            document.getElementById("restart-btn").style.display = "none";
-            document.getElementById("result-container").innerHTML = "";
-            document.getElementById("question-container").style.display = "block";
-            document.body.classList.remove("yellow-theme");
-            document.getElementById("game-container").classList.remove("yellow-theme");
-            shuffleQuestions(); // Reorganiza las preguntas antes de comenzar
-            loadQuestion();
-            document.getElementById("progress-bar").style.background = "linear-gradient(to right, #9C27B0, #673AB7)"; // Volver al color morado
-        }
-
-        // Comienza el juego con preguntas aleatorias
-        shuffleQuestions();
+    <div id="question-container">
+      <p id="question"></p>
+      <div id="answers-container">
+        <button class="answer-btn" onclick="checkAnswer(0)">Respuesta 1</button>
+        <button class="answer-btn" onclick="checkAnswer(1)">Respuesta 2</button>
+        <button class="answer-btn" onclick="checkAnswer(2)">Respuesta 3</button>
+        <button class="answer-btn" onclick="checkAnswer(3)">Respuesta 4</button>
+      </div>
+    </div>
+    <div id="score-container">
+      <p>Puntaje: <span id="score">0</span></p>
+    </div>
+    <div id="result-container"></div>
+    <button id="next-btn" onclick="nextQuestion()">Siguiente</button>
+    <button id="restart-btn" onclick="restartGame()">Volver a Jugar</button>
+  </div>
+  <!-- Ventana emergente para mostrar el resultado -->
+  <div id="result-modal">
+    <p id="result-text"></p>
+    <button id="next-btn-modal" onclick="nextQuestion()">Siguiente</button>
+  </div>
+  <script>
+    let questions = [
+      {
+        question: "¿Quién fue el primer hombre creado por Dios?",
+        options: ["Adán", "Noé", "Abraham", "Moisés"],
+        answer: 0
+      },
+      {
+        question: "¿Cuál es el nombre del hermano de Moisés?",
+        options: ["Aaron", "Josué", "David", "Elías"],
+        answer: 0
+      },
+      {
+        question: "¿En qué parte de la Biblia se encuentra el Salmo 23?",
+        options: ["Antiguo Testamento", "Nuevo Testamento", "Apocalipsis", "Hechos"],
+        answer: 0
+      },
+      {
+        question: "¿Qué milagro hizo Jesús en las bodas de Caná?",
+        options: ["Sanó a un ciego", "Multiplicó los panes", "Convirtió agua en vino", "Resucitó a Lázaro"],
+        answer: 2
+      }
+    ];
+    let currentQuestionIndex = 0;
+    let score = 0;
+    // Inicia el juego ocultando la pantalla de inicio y mostrando el contenedor del juego
+    function startGame() {
+      document.getElementById("welcome-screen").style.display = "none";
+      document.getElementById("game-container").style.display = "block";
+      shuffleQuestions();
+      loadQuestion();
+    }
+    // Mezcla las preguntas de forma aleatoria
+    function shuffleQuestions() {
+      questions = questions.sort(() => Math.random() - 0.5);
+    }
+    // Carga la pregunta actual y actualiza la barra de progreso
+    function loadQuestion() {
+      let question = questions[currentQuestionIndex];
+      document.getElementById("question").textContent = question.question;
+      let buttons = document.querySelectorAll(".answer-btn");
+      buttons.forEach((button, index) => {
+        button.textContent = question.options[index];
+      });
+      updateProgressBar();
+    }
+    // Al seleccionar una respuesta, muestra el resultado en la ventana emergente (500ms de retraso)
+    function checkAnswer(selectedIndex) {
+      let correctAnswerIndex = questions[currentQuestionIndex].answer;
+      let resultModal = document.getElementById("result-modal");
+      let resultText = document.getElementById("result-text");
+      // Quita cualquier clase anterior de resultado
+      resultModal.classList.remove("correct", "incorrect");
+      if (selectedIndex === correctAnswerIndex) {
+        score++;
+        resultModal.classList.add("correct");
+        resultText.textContent = "¡Correcto!";
+      } else {
+        resultModal.classList.add("incorrect");
+        resultText.textContent = `¡Incorrecto! La respuesta correcta es: ${questions[currentQuestionIndex].options[correctAnswerIndex]}`;
+      }
+      document.getElementById("score").textContent = score;
+      setTimeout(() => {
+        resultModal.style.display = "block";
+      }, 500);
+    }
+    // Al hacer clic en "Siguiente", se oculta la ventana emergente y se carga la siguiente pregunta
+    function nextQuestion() {
+      document.getElementById("result-modal").style.display = "none";
+      currentQuestionIndex++;
+      if (currentQuestionIndex < questions.length) {
         loadQuestion();
-    </script>
+        document.getElementById("result-container").innerHTML = "";
+        document.getElementById("next-btn").style.display = "none";
+      } else {
+        document.getElementById("question-container").style.display = "none";
+        document.getElementById("result-container").innerHTML = "<h1>¡Todas las preguntas fueron contestadas!</h1>";
+        document.getElementById("next-btn").style.display = "none";
+        document.getElementById("restart-btn").style.display = "block";
+        document.body.classList.add("yellow-theme");
+        document.getElementById("game-container").classList.add("yellow-theme");
+        document.getElementById("progress-bar").style.background = "#FFB300";
+      }
+    }
+    // Actualiza la barra de progreso según la pregunta actual
+    function updateProgressBar() {
+      let progress = ((currentQuestionIndex + 1) / questions.length) * 100;
+      document.getElementById("progress-bar").style.width = progress + "%";
+    }
+    // Reinicia el juego
+    function restartGame() {
+      currentQuestionIndex = 0;
+      score = 0;
+      document.getElementById("score").textContent = score;
+      document.getElementById("next-btn").style.display = "none";
+      document.getElementById("restart-btn").style.display = "none";
+      document.getElementById("result-container").innerHTML = "";
+      document.getElementById("question-container").style.display = "block";
+      document.body.classList.remove("yellow-theme");
+      document.getElementById("game-container").classList.remove("yellow-theme");
+      shuffleQuestions();
+      loadQuestion();
+      document.getElementById("progress-bar").style.background = "linear-gradient(to right, #9C27B0, #673AB7)";
+    }
+  </script>
 </body>
 </html>
+
