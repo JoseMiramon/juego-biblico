@@ -366,7 +366,7 @@
      
     // Cada objeto tiene: pregunta, opciones, índice de respuesta correcta y referencia
    
- let questions = [
+ const ORIGINAL_QUESTIONS = [
 /**** Categoría: Mujeres (ejemplo de 2 preguntas; puedes agregar hasta 10) *****/
       {
   question: "¿Quién fue la madre de Samuel?",
@@ -953,9 +953,10 @@
     answer: 2,
     reference: "Romanos 12:2"
   } */
-
   ];
-
+	  
+  let availableQuestions = [...ORIGINAL_QUESTIONS];
+  let questions = [];
   let currentQuestionIndex = 0;
   let score = 0;
 
@@ -969,11 +970,14 @@
 
     // Mezcla las preguntas de forma aleatoria
     function shuffleQuestions() {
-      questions = questions.sort(() => Math.random() - 0.5);
-if (questions.length > 15) {
-        questions = questions.slice(0, 15);
-      }
+  const MAX_PREGUNTAS = 10;
+  if (availableQuestions.length < MAX_PREGUNTAS) {
+    availableQuestions = [...ORIGINAL_QUESTIONS];
   }
+  availableQuestions.sort(() => Math.random() - 0.5);
+  questions = availableQuestions.slice(0, MAX_PREGUNTAS);
+  availableQuestions = availableQuestions.filter(q => !questions.includes(q));
+}
 
   // Carga la pregunta actual y actualiza la barra de progreso
   function loadQuestion() {
